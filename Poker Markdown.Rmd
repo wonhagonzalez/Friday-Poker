@@ -1,0 +1,62 @@
+---
+title: "Friday Night Poker"
+author: "Won Ha Gonzalez"
+date: "7/1/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Friday Night Poker
+
+Since Jeff has taken the time to put the spreadsheet together, I figured that I could use it to practice some things.  So, I decided to make some visualizations of our performances.
+
+### Overall Winnings
+
+```{r overall, echo=F, message=F, fig.height=7, fig.width=10}
+Friday_Poker <- read.csv("C:/Users/wonha/Desktop/My Projects/Friday_Poker.csv")
+Friday_Poker$Poker_Earnings <- Friday_Poker$Poker_Winnings - Friday_Poker$Poker_Wagered 
+Friday_Poker$Side_WinPct <- Friday_Poker$Side_Bets_Won/Friday_Poker$Side_Bets
+Friday_Poker$Total_Action <- Friday_Poker$Buy.ins + Friday_Poker$Side_Bets
+Friday_Poker$Total_Earnings <- Friday_Poker$Poker_Earnings + Friday_Poker$Side_Earnings
+
+##dealing with NaN for win pct.
+Friday_Poker$Side_WinPct[is.na(Friday_Poker$Side_WinPct)] <- NA
+
+library(ggplot2)
+library(plotly)
+
+p1 <- ggplot(Friday_Poker) +
+ aes(x = Total_Action, y = Total_Earnings, colour = Participants) +
+ geom_point(size = 3L) +
+ scale_color_hue() +
+ labs(x = "# of Bets", y = "Earnings ($)", title = "Friday Poker", subtitle = "Total Earnings vs. Total Bets Made", color = "Players") +
+ theme_minimal()
+ggplotly(p1)
+```
+
+### Poker Performance
+
+```{r poker, echo=FALSE, fig.height=7, message=F, fig.width=10}
+p2 <- ggplot(Friday_Poker) +
+ aes(x = Buy.ins, y = Victories, colour = Participants, size = Poker_Winnings) +
+ geom_point() +
+ scale_color_hue() +
+ labs(x = "# of Buy-Ins", y = "Games Won", title = "Friday Poker", subtitle = "Poker Results", color = "Players", size = "Money Earned") +
+ theme_minimal()
+ggplotly(p2)
+```
+
+### Side Bet Performance
+
+```{r side, echo=F, message=F, fig.height=7, fig.width=11}
+p3 <- ggplot(Friday_Poker) +
+ aes(x = Side_Bets, y = Side_Earnings, colour = Participants, size = Side_WinPct) +
+ geom_point() +
+ scale_color_hue() +
+ labs(x = "# of Side Bets", y = "Side Earnings ($)", title = "Friday Poker", subtitle = "Side Bets", color = "Players", size = "Win Pct.") +
+ theme_minimal()
+ggplotly(p3)
+```
