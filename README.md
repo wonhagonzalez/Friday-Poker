@@ -1,2 +1,2 @@
 # Friday-Poker
-Simple visualization of our weekly Lockdown Poker Games using using Plotly and output using RMarkdown
+Just for fun: a simple visualization of our weekly Lockdown Poker Games using using Plotly and output using RMarkdown
